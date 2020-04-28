@@ -14,6 +14,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button newGame = findViewById(R.id.newGameButton);
         findViewById(R.id.newGameButton).setOnClickListener(unused -> startActivity(
-                new Intent(this, GameActivity.class)));
+                new Intent(this, GameModeChoice.class)));
+        Button noPlay = findViewById(R.id.noDontPlay);
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addCategory( Intent.CATEGORY_HOME );
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        noPlay.setOnClickListener(unused -> startActivity(homeIntent));
     }
 }
