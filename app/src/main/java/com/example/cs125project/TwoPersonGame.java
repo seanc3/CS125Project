@@ -9,10 +9,10 @@ public class TwoPersonGame extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GridDrawer pixelGrid = new GridDrawer(this);
-        pixelGrid.setNumColumns(3);
-        pixelGrid.setNumRows(3);
-        setContentView(pixelGrid);
+        TwoPlayerGameLogic current = new TwoPlayerGameLogic(this);
+        current.setNumColumns(3);
+        current.setNumRows(3);
+        setContentView(current);
         //use MotionEvent // onTouchEvent()
         //https://stackoverflow.com/questions/24842550/2d-array-grid-on-drawing-canvas
     }

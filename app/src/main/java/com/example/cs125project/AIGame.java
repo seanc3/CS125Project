@@ -9,9 +9,9 @@ public class AIGame extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GridDrawer pixelGrid = new GridDrawer(this);
-        pixelGrid.setNumColumns(3);
-        pixelGrid.setNumRows(3);
-        setContentView(pixelGrid);
+        AIGameLogic current = new AIGameLogic(this);
+        current.setNumColumns(3);
+        current.setNumRows(3);
+        setContentView(current);
     }
 }
