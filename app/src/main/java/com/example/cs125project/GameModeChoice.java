@@ -15,7 +15,7 @@ public class GameModeChoice extends AppCompatActivity {
         Button singlePlayer = findViewById(R.id.singlePlayer);
         Button doublePlayer = findViewById(R.id.doublePlayer);
         singlePlayer.setOnClickListener(unused -> startActivity(
-                new Intent(this, AIGame.class)));
+                new Intent(this, TimerMode.class)));
         doublePlayer.setOnClickListener(unused -> startActivity(
                 new Intent(this, TwoPersonGame.class)));
     }

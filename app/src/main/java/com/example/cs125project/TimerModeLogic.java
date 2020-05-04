@@ -8,15 +8,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.Timer;
-import java.util.TimerTask;
+//import java.util.Timer;
+//import java.util.TimerTask;
 
 
-public class AIGameLogic extends View {
+public class TimerModeLogic extends View {
     private int numColumns, numRows;
     private int cellWidth, cellHeight;
     private Paint gridPaint = new Paint();
@@ -29,16 +30,10 @@ public class AIGameLogic extends View {
     private Context context;
     private int secondsPassed = 0;
 
-    Timer timer = new Timer();
-    TimerTask task = new TimerTask() {
-        public void run() {
-            secondsPassed++;
+    CountDownTimer timer = new CountDownTimer(3000, 1000) {
+        public void onTick(long untilFinished) {
         }
-    };
-
-    public void startTimer() {
-        timer.schedule(task,0000,1000);
-        if (secondsPassed >= 2) {
+        public void onFinish() {
             String winner;
             if (turnCount % 2 == 0) {
                 winner = "Circle";
@@ -52,7 +47,7 @@ public class AIGameLogic extends View {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // Continue with delete operation
-                            Intent intent = new Intent(getContext(), TwoPersonGame.class);
+                            Intent intent = new Intent(getContext(), TimerMode.class);
                             context.startActivity(intent);
                         }
                     })
@@ -72,16 +67,15 @@ public class AIGameLogic extends View {
                         }
                     })
                     .show();
-        } else {
-            timer.cancel();
         }
-    }
+    };
 
-    public AIGameLogic(Context context) {
+
+    public TimerModeLogic(Context context) {
         this(context, null);
     }
 
-    public AIGameLogic(Context context, AttributeSet attrs) {
+    public TimerModeLogic(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         gridPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -162,7 +156,6 @@ public class AIGameLogic extends View {
             canvas.drawLine(0, i * cellHeight, width, i * cellHeight, gridPaint);
         }
         if (turnCount == 0) { //preliminary alert dialog
-            startTimer();
             new AlertDialog.Builder(context)
                     .setMessage("X goes first!")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -184,11 +177,11 @@ public class AIGameLogic extends View {
             if (turnCount % 2 != 0 && board[column][row] == 0) {
                 board[column][row] = circleCapture;
                 turnCount++;
-                startTimer();
+                timer.cancel();
             } else if (turnCount % 2 == 0 && board[column][row] == 0){
                 board[column][row] = xCapture;
+                timer.cancel();
                 turnCount++;
-                startTimer();
             }
             invalidate();
             // add timer to end game, depending on turncount
@@ -206,7 +199,7 @@ public class AIGameLogic extends View {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // Continue with delete operation
-                                Intent intent = new Intent(getContext(), TwoPersonGame.class);
+                                Intent intent = new Intent(getContext(), TimerMode.class);
                                 context.startActivity(intent);
                             }
                         })
@@ -234,7 +227,7 @@ public class AIGameLogic extends View {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // Continue with delete operation
-                                Intent intent = new Intent(getContext(), TwoPersonGame.class);
+                                Intent intent = new Intent(getContext(), TimerMode.class);
                                 context.startActivity(intent);
                             }
                         })
@@ -254,6 +247,8 @@ public class AIGameLogic extends View {
                             }
                         })
                         .show();
+            } else {
+                timer.start();
             }
         }
         return true;
