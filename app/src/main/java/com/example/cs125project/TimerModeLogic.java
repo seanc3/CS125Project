@@ -30,7 +30,7 @@ public class TimerModeLogic extends View {
     private Context context;
     private int secondsPassed = 0;
 
-    CountDownTimer timer = new CountDownTimer(3000, 1000) {
+    CountDownTimer timer = new CountDownTimer(1500, 1000) {
         public void onTick(long untilFinished) {
         }
         public void onFinish() {
