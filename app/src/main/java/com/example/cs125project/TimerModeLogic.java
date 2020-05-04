@@ -28,7 +28,6 @@ public class TimerModeLogic extends View {
     private int xCapture = 1;
     private int circleCapture = 2;
     private Context context;
-    private int secondsPassed = 0;
 
     CountDownTimer timer = new CountDownTimer(1500, 1000) {
         public void onTick(long untilFinished) {

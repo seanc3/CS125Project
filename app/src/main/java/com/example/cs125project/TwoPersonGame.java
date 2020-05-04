@@ -13,7 +13,5 @@ public class TwoPersonGame extends AppCompatActivity {
         current.setNumColumns(3);
         current.setNumRows(3);
         setContentView(current);
-        //use MotionEvent // onTouchEvent()
-        //https://stackoverflow.com/questions/24842550/2d-array-grid-on-drawing-canvas
     }
 }
