@@ -12,6 +12,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 public class AIGameLogic extends View {
     private int numColumns, numRows;
     private int cellWidth, cellHeight;
@@ -23,6 +27,55 @@ public class AIGameLogic extends View {
     private int xCapture = 1;
     private int circleCapture = 2;
     private Context context;
+    private int secondsPassed = 0;
+
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
+        public void run() {
+            secondsPassed++;
+        }
+    };
+
+    public void startTimer() {
+        timer.schedule(task,0000,1000);
+        if (secondsPassed >= 2) {
+            String winner;
+            if (turnCount % 2 == 0) {
+                winner = "Circle";
+            } else {
+                winner = "X";
+            }
+            new AlertDialog.Builder(context)
+                    .setTitle("Game Over")
+                    .setMessage(winner + " wins!")
+                    .setPositiveButton("Play again", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Continue with delete operation
+                            Intent intent = new Intent(getContext(), TwoPersonGame.class);
+                            context.startActivity(intent);
+                        }
+                    })
+                    .setNeutralButton("Change Mode", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getContext(), GameModeChoice.class);
+                            context.startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Quit to Home", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                            homeIntent.addCategory( Intent.CATEGORY_HOME );
+                            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            context.startActivity(homeIntent);
+                        }
+                    })
+                    .show();
+        } else {
+            timer.cancel();
+        }
+    }
 
     public AIGameLogic(Context context) {
         this(context, null);
@@ -109,6 +162,7 @@ public class AIGameLogic extends View {
             canvas.drawLine(0, i * cellHeight, width, i * cellHeight, gridPaint);
         }
         if (turnCount == 0) { //preliminary alert dialog
+            startTimer();
             new AlertDialog.Builder(context)
                     .setMessage("X goes first!")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -130,11 +184,14 @@ public class AIGameLogic extends View {
             if (turnCount % 2 != 0 && board[column][row] == 0) {
                 board[column][row] = circleCapture;
                 turnCount++;
+                startTimer();
             } else if (turnCount % 2 == 0 && board[column][row] == 0){
                 board[column][row] = xCapture;
                 turnCount++;
+                startTimer();
             }
             invalidate();
+            // add timer to end game, depending on turncount
             if (checkWinner()) { //there has been a winner
                 String winner;
                 if (turnCount % 2 == 0) {
